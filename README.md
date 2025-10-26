@@ -21,17 +21,17 @@ A Website Template for SaaS Startup
 ├─ postcss.config.mjs
 ├─ README.md
 ├─ tsconfig.json
-├─ app/
+├─ app/ (Routes & Nested Routes)
 │  ├─ global.d.ts
 │  ├─ layout.tsx
 │  └─ page.tsx
-├─ features/
-├─ lib/
-├─ public/
-├─ styles/
+├─ features/ (Features with its UI Components, hooks and functionalities)
+├─ lib/ (Utility Functions & Optimizations)
+├─ public/ (Static Images & Fonts)
+├─ styles/ (CSS files & Fonts)
 │  └─ globals.css
-├─ types/
-└─ ui/
+├─ types/ (Typescript Types & Interfaces)
+└─ ui/ (Reusable UI Components such as Buttons, Cards, ...)
 ```
 
 ### To Run The Development Server
