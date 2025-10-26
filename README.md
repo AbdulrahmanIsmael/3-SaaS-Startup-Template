@@ -13,25 +13,25 @@ A Website Template for SaaS Startup
 ## Folder Structure
 
 ```bash
-3-saas-startup-template/
-├─ eslint.config.mjs
-├─ next-env.d.ts
-├─ next.config.ts
-├─ package.json
-├─ postcss.config.mjs
-├─ README.md
-├─ tsconfig.json
-├─ app/ (Routes & Nested Routes)
-│  ├─ global.d.ts
-│  ├─ layout.tsx
-│  └─ page.tsx
-├─ features/ (Features with its UI Components, hooks and functionalities)
-├─ lib/ (Utility Functions & Optimizations)
-├─ public/ (Static Images & Fonts)
-├─ styles/ (CSS files & Fonts)
-│  └─ globals.css
-├─ types/ (Typescript Types & Interfaces)
-└─ ui/ (Reusable UI Components such as Buttons, Cards, ...)
+├─ eslint.config.mjs        (ESLint configuration)
+├─ next-env.d.ts            (Next.js environment type declarations)
+├─ next.config.ts           (Next.js configuration)
+├─ package.json             (Project metadata, scripts & dependencies)
+├─ postcss.config.mjs       (PostCSS configuration)
+├─ README.md                (Project documentation)
+├─ tsconfig.json            (TypeScript configuration)
+├─ app/                     (Next.js App Router: routes, layouts, pages)
+│ ├─ global.d.ts
+│ ├─ layout.tsx
+│ └─ page.tsx
+├─ features/                (Feature modules: UI, hooks, and business logic)
+├─ lib/                     (Utilities, services, and helpers)
+├─ public/                  (Static assets: images, fonts, and icons)
+│ └─ assets
+├─ styles/                  (Global styles, Tailwind & CSS files)
+│ └─ globals.css
+├─ types/                   (TypeScript types and interfaces)
+└─ ui/                      (Reusable UI components: buttons, cards, etc.)
 ```
 
 ### To Run The Development Server
