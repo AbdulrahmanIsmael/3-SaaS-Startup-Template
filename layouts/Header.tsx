@@ -1,16 +1,61 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import { paths } from '@/lib/navigation';
+import { paths } from '@/lib/constants/navigation';
 import { usePathname } from 'next/navigation';
 import { FiMenu } from 'react-icons/fi';
 import { MdArrowRight } from 'react-icons/md';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import Submenu from '@/components/ui/Submenu';
+import { T_menuPaths, T_menuPosition } from '@/types/ui-types';
+import ResponsiveMenu from '@/components/ui/ResponsiveMenu';
+import { submenuMap } from '@/lib/constants/navigation';
 
 const Header = () => {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [menuPaths, setMenuPaths] = useState<T_menuPaths>([]);
+  const [position, setPosition] = useState<T_menuPosition>({ x: 0, y: 0 });
+  const hideTimeout = useRef<NodeJS.Timeout>(null);
+  const isHovering = useRef(false);
+
+  const handleShowSubmenu = (
+    menuName: string,
+    e?: React.MouseEvent<HTMLLIElement>
+  ): void => {
+    // Clear any pending hide timeouts
+    if (hideTimeout.current) {
+      clearTimeout(hideTimeout.current);
+    }
+
+    isHovering.current = true;
+
+    // positioning the submenu based on the menu item
+    if (e) {
+      setPosition({ x: (e?.target as HTMLLIElement).offsetLeft - 20, y: 80 });
+    }
+
+    // Logic to show submenu based on menuName
+    if (['PROJECTS', 'PAGES', 'BLOG'].includes(menuName)) {
+      setMenuPaths(submenuMap[menuName]);
+    } else {
+      setMenuPaths([]);
+    }
+  };
+
+  const handleHideSubmenu = (): void => {
+    isHovering.current = false;
+
+    // Add delay before hiding menu
+    hideTimeout.current = setTimeout(() => {
+      // Only hide if we're still not hovering
+      if (!isHovering.current) {
+        setMenuPaths([]);
+        setPosition({ x: 0, y: 0 });
+      }
+    }, 200);
+  };
 
   return (
     <>
@@ -26,12 +71,16 @@ const Header = () => {
             />
           </Link>
 
-          <div className="flex items-center gap-8">
+          <div className="flex max-[380px]:flex-col items-center gap-8 max-[380px]:gap-5">
             <ul className="hidden lg:flex lg:items-center lg:gap-10 lg:text-sm lg:font-semibold lg:text-(--secondary-color)">
               {
                 /* Rendering Nav Links With Their Paths */
                 paths.map((link, index) => (
-                  <li key={index}>
+                  <li
+                    key={index}
+                    onMouseOver={(e) => handleShowSubmenu(link.name, e)}
+                    onMouseOut={() => handleHideSubmenu()}
+                  >
                     <Link
                       href={link.path}
                       className={`${
@@ -47,7 +96,7 @@ const Header = () => {
 
             <button
               type="button"
-              className="cursor-pointer bg-(--primary-color) text-white text-sm font-medium px-10 py-5 hover:bg-(--secondary-color) hover:transition hover:duration-300"
+              className="cursor-pointer bg-(--primary-color) text-white text-sm max-[380px]:text-xs font-medium px-10 py-5 max-[380px]:px-5 max-[380px]:py-2 hover:bg-(--secondary-color) hover:transition hover:duration-300"
             >
               GET QUOTE
             </button>
@@ -62,39 +111,21 @@ const Header = () => {
         </div>
       </header>
 
-      <motion.div
-        className="container absolute top-[104px] shadow-md left-1/2 -translate-x-1/2"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{
-          opacity: isMenuOpen ? 1 : 0,
-          y: isMenuOpen ? 0 : -20,
-          display: isMenuOpen ? 'block' : 'none',
-        }}
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
-      >
-        <ul className="bg-white px-8 py-5 flex flex-col items gap-5">
-          {
-            /* Rendering Nav Links With Their Paths */
-            paths.map((link, index) => (
-              <li
-                key={index}
-                className="cursor-pointer flex items-center justify-between"
-              >
-                <Link
-                  href={link.path}
-                  className="text-lg font-medium text-(--secondary-color)"
-                >
-                  {link.name[0].toUpperCase()}
-                  {link.name.substring(1).toLowerCase()}
-                </Link>
-                {['PROJECTS', 'PAGES', 'BLOG'].includes(link.name) && (
-                  <MdArrowRight size={25} fill="#0b2238" />
-                )}
-              </li>
-            ))
+      {/* Responsive Nav Links Component */}
+      <ResponsiveMenu isMenuOpen={isMenuOpen} />
+
+      {/* Submenu Component */}
+      <Submenu
+        paths={menuPaths}
+        position={position}
+        onMouseEnter={() => {
+          if (hideTimeout.current) {
+            clearTimeout(hideTimeout.current);
           }
-        </ul>
-      </motion.div>
+          isHovering.current = true;
+        }}
+        onMouseLeave={handleHideSubmenu}
+      />
     </>
   );
 };
