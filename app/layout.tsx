@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { poppins } from '@/styles/fonts';
 import '@/styles/globals.css';
 import Header from '@/layouts/Header';
+import Footer from '@/layouts/Footer';
 
 export const metadata: Metadata = {
   title: 'SaaS Startup Template',
@@ -36,6 +37,7 @@ export default function RootLayout({
         <main>
           <div className="container mx-auto">{children}</div>
         </main>
+        <Footer />
       </body>
     </html>
   );

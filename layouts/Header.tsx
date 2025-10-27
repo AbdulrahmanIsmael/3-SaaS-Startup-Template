@@ -59,7 +59,7 @@ const Header = () => {
 
   return (
     <>
-      <header className="bg-white py-3 shadow-sm">
+      <header className="bg-white py-3 shadow-sm  px-4">
         <div className="container mx-auto flex items-center justify-between">
           <Link href="/">
             {/* TEMP: Replace alt with the website name + "logo" & src with the relative or absolute URL of the logo image*/}
